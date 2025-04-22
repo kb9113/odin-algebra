@@ -95,7 +95,7 @@ test_calc_prop_based :: proc(t: ^testing.T)
             return true
         }
 
-        c := a.coefficents[0]
+        c := a.coefficients[0]
 
         diff := differentiate(a)
         defer delete_polynomial(diff)
@@ -129,8 +129,8 @@ test_calc_prop_based :: proc(t: ^testing.T)
 @(test)
 test_eq_1 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, []f32{1, 2, 3})
+    p1 := make_from_coefficients(f32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, []f32{1, 2, 3})
     testing.expect(
         t, eq(p1, p2)
     )
@@ -141,8 +141,8 @@ test_eq_1 :: proc(t: ^testing.T)
 @(test)
 test_eq_2 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, []f32{1, 2, 4})
-    p2 := make_from_coefficents(f32, []f32{1, 2, 3})
+    p1 := make_from_coefficients(f32, []f32{1, 2, 4})
+    p2 := make_from_coefficients(f32, []f32{1, 2, 3})
     testing.expect(
         t, !eq(p1, p2)
     )
@@ -153,8 +153,8 @@ test_eq_2 :: proc(t: ^testing.T)
 @(test)
 test_eq_3 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, []f32{1, 2, 3})
+    p1 := make_from_coefficients(f32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, []f32{1, 2, 3})
     testing.expect(
         t, eq(p1, p2)
     )
@@ -165,8 +165,8 @@ test_eq_3 :: proc(t: ^testing.T)
 @(test)
 test_eq_4 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, []f32{})
-    p2 := make_from_coefficents(f32, []f32{})
+    p1 := make_from_coefficients(f32, []f32{})
+    p2 := make_from_coefficients(f32, []f32{})
     testing.expect(
         t, eq(p1, p2)
     )
@@ -177,11 +177,11 @@ test_eq_4 :: proc(t: ^testing.T)
 @(test)
 test_add_1 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, []f32{2, 3, 4})
     sum := make_uninitialized(f32, -1)
     add(&sum, p1, p2)
-    expected_sum := make_from_coefficents(f32, []f32{3, 5, 7})
+    expected_sum := make_from_coefficients(f32, []f32{3, 5, 7})
     testing.expect(
         t, eq(sum, expected_sum)
     )
@@ -194,11 +194,11 @@ test_add_1 :: proc(t: ^testing.T)
 @(test)
 test_add_2 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, field.FIELD_F32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, field.FIELD_F32, []f32{2, 3, 4})
     sum := make_uninitialized(f32, field.FIELD_F32, -1)
     add(&sum, p1, p2)
-    expected_sum := make_from_coefficents(f32, field.FIELD_F32, []f32{3, 5, 7})
+    expected_sum := make_from_coefficients(f32, field.FIELD_F32, []f32{3, 5, 7})
     testing.expect(
         t, eq(sum, expected_sum)
     )
@@ -211,10 +211,10 @@ test_add_2 :: proc(t: ^testing.T)
 @(test)
 test_add_3 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, []f32{2, 3, 4})
     add(&p1, p1, p2)
-    expected_sum := make_from_coefficents(f32, []f32{3, 5, 7})
+    expected_sum := make_from_coefficients(f32, []f32{3, 5, 7})
     testing.expect(
         t, eq(p1, expected_sum)
     )
@@ -226,10 +226,10 @@ test_add_3 :: proc(t: ^testing.T)
 @(test)
 test_add_4 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, field.FIELD_F32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, field.FIELD_F32, []f32{2, 3, 4})
     add(&p1, p1, p2)
-    expected_sum := make_from_coefficents(f32, field.FIELD_F32, []f32{3, 5, 7})
+    expected_sum := make_from_coefficients(f32, field.FIELD_F32, []f32{3, 5, 7})
     testing.expect(
         t, eq(p1, expected_sum)
     )
@@ -241,9 +241,9 @@ test_add_4 :: proc(t: ^testing.T)
 @(test)
 test_ref_add_3 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2, 3})
+    p1 := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2, 3})
     add(&p1, p1, p1)
-    expected_sum := make_from_coefficents(f32, field.FIELD_F32, []f32{2, 4, 6})
+    expected_sum := make_from_coefficients(f32, field.FIELD_F32, []f32{2, 4, 6})
     testing.expect(
         t, eq(p1, expected_sum)
     )
@@ -254,11 +254,11 @@ test_ref_add_3 :: proc(t: ^testing.T)
 @(test)
 test_sub_1 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, []f32{2, 3, 4})
     dif := make_uninitialized(f32, -1)
     sub(&dif, p1, p2)
-    expected_sub := make_from_coefficents(f32, []f32{-1, -1, -1})
+    expected_sub := make_from_coefficients(f32, []f32{-1, -1, -1})
     testing.expect(
         t, eq(dif, expected_sub)
     )
@@ -271,11 +271,11 @@ test_sub_1 :: proc(t: ^testing.T)
 @(test)
 test_sub_2 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, field.FIELD_F32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, field.FIELD_F32, []f32{2, 3, 4})
     dif := make_uninitialized(f32, field.FIELD_F32, -1)
     sub(&dif, p1, p2)
-    expected_sub := make_from_coefficents(f32, field.FIELD_F32, []f32{-1, -1, -1})
+    expected_sub := make_from_coefficients(f32, field.FIELD_F32, []f32{-1, -1, -1})
     testing.expect(
         t, eq(dif, expected_sub)
     )
@@ -288,10 +288,10 @@ test_sub_2 :: proc(t: ^testing.T)
 @(test)
 test_sub_3 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, []f32{2, 3, 4})
     sub(&p1, p1, p2)
-    expected_sub := make_from_coefficents(f32, []f32{-1, -1, -1})
+    expected_sub := make_from_coefficients(f32, []f32{-1, -1, -1})
     testing.expect(
         t, eq(p1, expected_sub)
     )
@@ -303,10 +303,10 @@ test_sub_3 :: proc(t: ^testing.T)
 @(test)
 test_ref_sub_2 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, field.FIELD_F32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, field.FIELD_F32, []f32{2, 3, 4})
     sub(&p1, p1, p2)
-    expected_sub := make_from_coefficents(f32, field.FIELD_F32, []f32{-1, -1, -1})
+    expected_sub := make_from_coefficients(f32, field.FIELD_F32, []f32{-1, -1, -1})
     testing.expect(
         t, eq(p1, expected_sub)
     )
@@ -318,9 +318,9 @@ test_ref_sub_2 :: proc(t: ^testing.T)
 @(test)
 test_ref_sub_3 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2, 3})
+    p1 := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2, 3})
     sub(&p1, p1, p1)
-    expected_sum := make_from_coefficents(f32, field.FIELD_F32, []f32{})
+    expected_sum := make_from_coefficients(f32, field.FIELD_F32, []f32{})
     testing.expect(
         t, eq(p1, expected_sum)
     )
@@ -331,11 +331,11 @@ test_ref_sub_3 :: proc(t: ^testing.T)
 @(test)
 test_mul_1 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, []f32{2, 3, 4})
     prod := make_uninitialized(f32, -1)
     mul(&prod, p1, p2)
-    expected_prod := make_from_coefficents(f32, []f32{2, 7, 16, 17, 12})
+    expected_prod := make_from_coefficients(f32, []f32{2, 7, 16, 17, 12})
     testing.expect(
         t, eq(prod, expected_prod)
     )
@@ -348,11 +348,11 @@ test_mul_1 :: proc(t: ^testing.T)
 @(test)
 test_mul_2 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, field.FIELD_F32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, field.FIELD_F32, []f32{2, 3, 4})
     prod := make_uninitialized(f32, field.FIELD_F32, -1)
     mul(&prod, p1, p2)
-    expected_prod := make_from_coefficents(f32, field.FIELD_F32, []f32{2, 7, 16, 17, 12})
+    expected_prod := make_from_coefficients(f32, field.FIELD_F32, []f32{2, 7, 16, 17, 12})
     testing.expect(
         t, eq(prod, expected_prod)
     )
@@ -365,10 +365,10 @@ test_mul_2 :: proc(t: ^testing.T)
 @(test)
 test_mul_3 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, []f32{2, 3, 4})
     mul(&p1, p1, p2)
-    expected_prod := make_from_coefficents(f32, []f32{2, 7, 16, 17, 12})
+    expected_prod := make_from_coefficients(f32, []f32{2, 7, 16, 17, 12})
     testing.expect(
         t, eq(p1, expected_prod)
     )
@@ -380,10 +380,10 @@ test_mul_3 :: proc(t: ^testing.T)
 @(test)
 test_mul_4 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2, 3})
-    p2 := make_from_coefficents(f32, field.FIELD_F32, []f32{2, 3, 4})
+    p1 := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2, 3})
+    p2 := make_from_coefficients(f32, field.FIELD_F32, []f32{2, 3, 4})
     mul(&p1, p1, p2)
-    expected_prod := make_from_coefficents(f32, field.FIELD_F32, []f32{2, 7, 16, 17, 12})
+    expected_prod := make_from_coefficients(f32, field.FIELD_F32, []f32{2, 7, 16, 17, 12})
     testing.expect(
         t, eq(p1, expected_prod)
     )
@@ -395,10 +395,10 @@ test_mul_4 :: proc(t: ^testing.T)
 @(test)
 test_mul_5 :: proc(t: ^testing.T)
 {
-    p1 := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2, 3})
+    p1 := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2, 3})
     mul(&p1, p1, p1)
 
-    expected_sum := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 4, 10, 12, 9})
+    expected_sum := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 4, 10, 12, 9})
     testing.expect(
         t, eq(p1, expected_sum)
     )
@@ -413,39 +413,39 @@ test_mul_6 :: proc(t: ^testing.T)
     defer delete_polynomial_integral_domain(id)
 
     //x^2+x+1
-    p := make_from_coefficents(
+    p := make_from_coefficients(
         Polynomial(i64, integral_domain.IntegralDomain(i64)),
         id,
         []Polynomial(i64, integral_domain.IntegralDomain(i64)){
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
         }
     )
 
     // x^2-1+y
-    q := make_from_coefficents(
+    q := make_from_coefficients(
         Polynomial(i64, integral_domain.IntegralDomain(i64)),
         id,
         []Polynomial(i64, integral_domain.IntegralDomain(i64)){
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-1, 1}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-1, 1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
         }
     )
 
     prod : Polynomial(Polynomial(i64, integral_domain.IntegralDomain(i64)), integral_domain.IntegralDomain(Polynomial(i64, integral_domain.IntegralDomain(i64))))
     mul(&prod, p, q)
 
-    expected_prod := make_from_coefficents(
+    expected_prod := make_from_coefficients(
         Polynomial(i64, integral_domain.IntegralDomain(i64)),
         id,
         []Polynomial(i64, integral_domain.IntegralDomain(i64)){
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-1, 1}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-1, 1}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{0, 1}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-1, 1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-1, 1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{0, 1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
         }
     )
     testing.expect(
@@ -461,14 +461,14 @@ test_mul_6 :: proc(t: ^testing.T)
 @(test)
 test_div_1 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, []f32{-10, -3, 1})
-    q := make_from_coefficents(f32, []f32{2, 1})
+    p := make_from_coefficients(f32, []f32{-10, -3, 1})
+    q := make_from_coefficients(f32, []f32{2, 1})
     quot, rem : Polynomial(f32, field.NumericField(f32))
     div(&quot, &rem, p, q)
 
 
-    expected_div := make_from_coefficents(f32, []f32{-5, 1})
-    expected_rem := make_from_coefficents(f32, []f32{})
+    expected_div := make_from_coefficients(f32, []f32{-5, 1})
+    expected_rem := make_from_coefficients(f32, []f32{})
     testing.expect(t, eq(quot, expected_div))
     testing.expect(t, eq(rem, expected_rem))
 
@@ -483,13 +483,13 @@ test_div_1 :: proc(t: ^testing.T)
 @(test)
 test_div_2 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, []f32{-1, -5, 2})
-    q := make_from_coefficents(f32, []f32{-3, 1})
+    p := make_from_coefficients(f32, []f32{-1, -5, 2})
+    q := make_from_coefficients(f32, []f32{-3, 1})
     quot, rem : Polynomial(f32, field.NumericField(f32))
     div(&quot, &rem, p, q)
 
-    expected_div := make_from_coefficents(f32, []f32{1, 2})
-    expected_rem := make_from_coefficents(f32, []f32{2})
+    expected_div := make_from_coefficients(f32, []f32{1, 2})
+    expected_rem := make_from_coefficients(f32, []f32{2})
     testing.expect(t, eq(quot, expected_div))
     testing.expect(t, eq(rem, expected_rem))
 
@@ -504,13 +504,13 @@ test_div_2 :: proc(t: ^testing.T)
 @(test)
 test_div_3 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, []f32{-9, 6, 0, 0, 2, 0, 1})
-    q := make_from_coefficents(f32, []f32{3, 0, 0, 1})
+    p := make_from_coefficients(f32, []f32{-9, 6, 0, 0, 2, 0, 1})
+    q := make_from_coefficients(f32, []f32{3, 0, 0, 1})
     quot, rem : Polynomial(f32, field.NumericField(f32))
     div(&quot, &rem, p, q)
 
-    expected_div := make_from_coefficents(f32, []f32{-3, 2, 0, 1})
-    expected_rem := make_from_coefficents(f32, []f32{})
+    expected_div := make_from_coefficients(f32, []f32{-3, 2, 0, 1})
+    expected_rem := make_from_coefficients(f32, []f32{})
     testing.expect(t, eq(quot, expected_div))
     testing.expect(t, eq(rem, expected_rem))
 
@@ -525,13 +525,13 @@ test_div_3 :: proc(t: ^testing.T)
 @(test)
 test_div_4 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, []f32{9})
-    q := make_from_coefficents(f32, []f32{4})
+    p := make_from_coefficients(f32, []f32{9})
+    q := make_from_coefficients(f32, []f32{4})
     quot, rem : Polynomial(f32, field.NumericField(f32))
     div(&quot, &rem, p, q)
 
-    expected_div := make_from_coefficents(f32, []f32{2.25})
-    expected_rem := make_from_coefficents(f32, []f32{})
+    expected_div := make_from_coefficients(f32, []f32{2.25})
+    expected_rem := make_from_coefficients(f32, []f32{})
     testing.expect(t, eq(quot, expected_div))
     testing.expect(t, eq(rem, expected_rem))
 
@@ -546,13 +546,13 @@ test_div_4 :: proc(t: ^testing.T)
 @(test)
 test_div_5 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, field.FIELD_F32, []f32{-10, -3, 1})
-    q := make_from_coefficents(f32, field.FIELD_F32, []f32{2, 1})
+    p := make_from_coefficients(f32, field.FIELD_F32, []f32{-10, -3, 1})
+    q := make_from_coefficients(f32, field.FIELD_F32, []f32{2, 1})
     quot, rem : Polynomial(f32, field.Field(f32))
     div(&quot, &rem, p, q)
 
-    expected_div := make_from_coefficents(f32, field.FIELD_F32, []f32{-5, 1})
-    expected_rem := make_from_coefficents(f32, field.FIELD_F32, []f32{})
+    expected_div := make_from_coefficients(f32, field.FIELD_F32, []f32{-5, 1})
+    expected_rem := make_from_coefficients(f32, field.FIELD_F32, []f32{})
     testing.expect(t, eq(quot, expected_div))
     testing.expect(t, eq(rem, expected_rem))
 
@@ -567,13 +567,13 @@ test_div_5 :: proc(t: ^testing.T)
 @(test)
 test_div_6 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, field.FIELD_F32, []f32{-1, -5, 2})
-    q := make_from_coefficents(f32, field.FIELD_F32, []f32{-3, 1})
+    p := make_from_coefficients(f32, field.FIELD_F32, []f32{-1, -5, 2})
+    q := make_from_coefficients(f32, field.FIELD_F32, []f32{-3, 1})
     quot, rem : Polynomial(f32, field.Field(f32))
     div(&quot, &rem, p, q)
 
-    expected_div := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2})
-    expected_rem := make_from_coefficents(f32, field.FIELD_F32, []f32{2})
+    expected_div := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2})
+    expected_rem := make_from_coefficients(f32, field.FIELD_F32, []f32{2})
     testing.expect(t, eq(quot, expected_div))
     testing.expect(t, eq(rem, expected_rem))
 
@@ -588,13 +588,13 @@ test_div_6 :: proc(t: ^testing.T)
 @(test)
 test_div_7 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, field.FIELD_F32, []f32{-9, 6, 0, 0, 2, 0, 1})
-    q := make_from_coefficents(f32, field.FIELD_F32, []f32{3, 0, 0, 1})
+    p := make_from_coefficients(f32, field.FIELD_F32, []f32{-9, 6, 0, 0, 2, 0, 1})
+    q := make_from_coefficients(f32, field.FIELD_F32, []f32{3, 0, 0, 1})
     quot, rem : Polynomial(f32, field.Field(f32))
     div(&quot, &rem, p, q)
 
-    expected_div := make_from_coefficents(f32, field.FIELD_F32, []f32{-3, 2, 0, 1})
-    expected_rem := make_from_coefficents(f32, field.FIELD_F32, []f32{})
+    expected_div := make_from_coefficients(f32, field.FIELD_F32, []f32{-3, 2, 0, 1})
+    expected_rem := make_from_coefficients(f32, field.FIELD_F32, []f32{})
     testing.expect(t, eq(quot, expected_div))
     testing.expect(t, eq(rem, expected_rem))
 
@@ -609,13 +609,13 @@ test_div_7 :: proc(t: ^testing.T)
 @(test)
 test_div_8 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, field.FIELD_F32, []f32{9})
-    q := make_from_coefficents(f32, field.FIELD_F32, []f32{4})
+    p := make_from_coefficients(f32, field.FIELD_F32, []f32{9})
+    q := make_from_coefficients(f32, field.FIELD_F32, []f32{4})
     quot, rem : Polynomial(f32, field.Field(f32))
     div(&quot, &rem, p, q)
 
-    expected_div := make_from_coefficents(f32, field.FIELD_F32, []f32{2.25})
-    expected_rem := make_from_coefficents(f32, field.FIELD_F32, []f32{})
+    expected_div := make_from_coefficients(f32, field.FIELD_F32, []f32{2.25})
+    expected_rem := make_from_coefficients(f32, field.FIELD_F32, []f32{})
     testing.expect(t, eq(quot, expected_div))
     testing.expect(t, eq(rem, expected_rem))
 
@@ -630,11 +630,11 @@ test_div_8 :: proc(t: ^testing.T)
 @(test)
 test_cancel_1 :: proc(t : ^testing.T)
 {
-    p := make_from_coefficents(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{1, 2, 3})
-    q := make_from_coefficents(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{-2, 3})
-    pq := make_from_coefficents(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{})
+    p := make_from_coefficients(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{1, 2, 3})
+    q := make_from_coefficients(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{-2, 3})
+    pq := make_from_coefficients(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{})
     mul(&pq, p, q)
-    p_canceled := make_from_coefficents(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{})
+    p_canceled := make_from_coefficients(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{})
     cancel(&p_canceled, pq, q)
 
     testing.expect(t, eq(p_canceled, p))
@@ -648,9 +648,9 @@ test_cancel_1 :: proc(t : ^testing.T)
 @(test)
 test_differentiate_1 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, []f32{1, 2, 3, 4})
+    p := make_from_coefficients(f32, []f32{1, 2, 3, 4})
     dp := differentiate(p)
-    expected_dp := make_from_coefficents(f32, []f32{2, 6, 12})
+    expected_dp := make_from_coefficients(f32, []f32{2, 6, 12})
     testing.expect(
         t, eq(dp, expected_dp)
     )
@@ -663,9 +663,9 @@ test_differentiate_1 :: proc(t: ^testing.T)
 @(test)
 test_differentiate_2 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2, 3, 4})
+    p := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2, 3, 4})
     dp := differentiate(p)
-    expected_dp := make_from_coefficents(f32, field.FIELD_F32, []f32{2, 6, 12})
+    expected_dp := make_from_coefficients(f32, field.FIELD_F32, []f32{2, 6, 12})
     testing.expect(
         t, eq(dp, expected_dp)
     )
@@ -678,7 +678,7 @@ test_differentiate_2 :: proc(t: ^testing.T)
 @(test)
 test_eval_1 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, []f32{1, 2, 3})
+    p := make_from_coefficients(f32, []f32{1, 2, 3})
     f_1 := eval(p, f32(1))
     testing.expectf(
         t, f_1 == 6, "expected f(1) == 6 but got f(1) == %f", f_1
@@ -689,7 +689,7 @@ test_eval_1 :: proc(t: ^testing.T)
 @(test)
 test_eval_2 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, field.FIELD_F32, []f32{1, 2, 3})
+    p := make_from_coefficients(f32, field.FIELD_F32, []f32{1, 2, 3})
     f_1 := eval(p, f32(1))
     testing.expectf(
         t, f_1 == 6, "expected f(1) == 6 but got f(1) == %f", f_1
@@ -705,7 +705,7 @@ test_roots :: proc(t: ^testing.T)
         return s * complex64(t)
     }
 
-    p := make_from_coefficents(f32, []f32{-1, -2, 3, 4})
+    p := make_from_coefficients(f32, []f32{-1, -2, 3, 4})
     rs := roots(p)
 
     testing.expect(t, len(rs) == 3)
@@ -721,7 +721,7 @@ test_roots :: proc(t: ^testing.T)
 @(test)
 test_real_roots :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(f32, []f32{-1, -2, 3, 4})
+    p := make_from_coefficients(f32, []f32{-1, -2, 3, 4})
     rs := real_roots(p)
 
     testing.expect(t, len(rs) == 3)
@@ -737,14 +737,14 @@ test_real_roots :: proc(t: ^testing.T)
 @(test)
 test_sub_resultant_pseudo_remainder_seq :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-5, 2, 8, -3, -3, 0, 1, 0, 1})
-    q := make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{21, -9, -4, 0, 5, 0, 3})
+    p := make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-5, 2, 8, -3, -3, 0, 1, 0, 1})
+    q := make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{21, -9, -4, 0, 5, 0, 3})
 
-    expected_sr_1 := make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{9, 0, -3, 0, 15})
-    expected_sr_2 := make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-245, 125, 65})
-    expected_sr_3 := make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-12300, 9326})
-    expected_sr_4 := make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{260708})
-    expected_sr_5 := make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{})
+    expected_sr_1 := make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{9, 0, -3, 0, 15})
+    expected_sr_2 := make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-245, 125, 65})
+    expected_sr_3 := make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-12300, 9326})
+    expected_sr_4 := make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{260708})
+    expected_sr_5 := make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{})
 
     it := make_sub_resultant_pseudo_remainder_iterator(p, q)
 
@@ -777,8 +777,8 @@ test_sub_resultant_pseudo_remainder_seq :: proc(t: ^testing.T)
 @(test)
 test_resultant_1 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{0, -2, 1})
-    q := make_from_coefficents(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{1, 2, 1})
+    p := make_from_coefficients(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{0, -2, 1})
+    q := make_from_coefficients(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{1, 2, 1})
     res := resultant(p, q)
     testing.expect(t, res == 9)
 
@@ -789,8 +789,8 @@ test_resultant_1 :: proc(t: ^testing.T)
 @(test)
 test_resultant_2 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{1, 1, 1})
-    q := make_from_coefficents(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{1, 1, 0, 0, 0, 0, 0, -1})
+    p := make_from_coefficients(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{1, 1, 1})
+    q := make_from_coefficients(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{1, 1, 0, 0, 0, 0, 0, -1})
     res := resultant(p, q)
     testing.expect(t, res == 1)
 
@@ -801,8 +801,8 @@ test_resultant_2 :: proc(t: ^testing.T)
 @(test)
 test_resultant_3 :: proc(t: ^testing.T)
 {
-    p := make_from_coefficents(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{0, -2, 1})
-    q := make_from_coefficents(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{0, 2, 1})
+    p := make_from_coefficients(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{0, -2, 1})
+    q := make_from_coefficients(i32, integral_domain.INTEGRAL_DOMAIN_I32, []i32{0, 2, 1})
     res := resultant(p, q)
     testing.expect(t, res == 0)
 
@@ -817,29 +817,29 @@ test_resultant_4 :: proc(t: ^testing.T)
     defer delete_polynomial_integral_domain(id)
 
     //x^2+x+1
-    r1 := make_from_coefficents(
+    r1 := make_from_coefficients(
         Polynomial(i64, integral_domain.IntegralDomain(i64)),
         id,
         []Polynomial(i64, integral_domain.IntegralDomain(i64)){
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
         }
     )
 
     // x^2+1+y
-    r2 := make_from_coefficents(
+    r2 := make_from_coefficients(
         Polynomial(i64, integral_domain.IntegralDomain(i64)),
         id,
         []Polynomial(i64, integral_domain.IntegralDomain(i64)){
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-1, 1}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{}),
-            make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{-1, 1}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{}),
+            make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1}),
         }
     )
 
     res := resultant(r1, r2)
-    expected_res := make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{3, -3, 1})
+    expected_res := make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{3, -3, 1})
 
     testing.expect(t, eq(res, expected_res))
 
@@ -855,13 +855,13 @@ test_polynomial_pow :: proc(t: ^testing.T)
     id := make_polynomial_integral_domain(i64, integral_domain.INTEGRAL_DOMAIN_I64)
     defer delete_polynomial_integral_domain(id)
 
-    p := make_from_coefficents(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1, 2, 3})
+    p := make_from_coefficients(i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1, 2, 3})
     defer delete_polynomial(p)
     p_n : Polynomial(i64, integral_domain.IntegralDomain(i64))
     ring.integer_pow(&p_n, p, 5, id)
     defer delete_polynomial(p_n)
 
-    expected_p_n := make_from_coefficents(
+    expected_p_n := make_from_coefficients(
         i64, integral_domain.INTEGRAL_DOMAIN_I64, []i64{1, 10, 55, 200, 530, 1052, 1590, 1800, 1485, 810, 243}
     )
     defer delete_polynomial(expected_p_n)
@@ -869,4 +869,78 @@ test_polynomial_pow :: proc(t: ^testing.T)
     testing.expect(
         t, eq(p_n, expected_p_n)
     )
+}
+
+@(test)
+test_multi_variable_solve :: proc(t: ^testing.T)
+{
+    id := make_polynomial_integral_domain(f32, field.FIELD_F32)
+    defer delete_polynomial_integral_domain(id)
+
+    //x^2-10x-y^2
+    r1 := make_from_coefficients(
+        Polynomial(f32, field.Field(f32)),
+        id,
+        []Polynomial(f32, field.Field(f32)){
+            make_from_coefficients(f32, field.FIELD_F32, []f32{0, 0, -1}),
+            make_from_coefficients(f32, field.FIELD_F32, []f32{-10}),
+            make_from_coefficients(f32, field.FIELD_F32, []f32{1}),
+        }
+    )
+    defer delete_polynomial(r1)
+
+    // x^2+1+y
+    r2 := make_from_coefficients(
+        Polynomial(f32, field.Field(f32)),
+        id,
+        []Polynomial(f32, field.Field(f32)){
+            make_from_coefficients(f32, field.FIELD_F32, []f32{1, 1}),
+            make_from_coefficients(f32, field.FIELD_F32, []f32{}),
+            make_from_coefficients(f32, field.FIELD_F32, []f32{1}),
+        }
+    )
+    defer delete_polynomial(r2)
+
+    // y^4 + 2 y^3 + 3 y^2 + 102 y + 101
+    res := resultant(r1, r2)
+    defer delete_polynomial(res)
+    expected_res := make_from_coefficients(f32, field.FIELD_F32, []f32{101, 102, 3, 2, 1})
+    defer delete_polynomial(expected_res)
+
+    testing.expect(t, eq(res, expected_res))
+
+    y_values := real_roots(res)
+    defer delete(y_values)
+    for y in y_values
+    {
+        substituted_polynomial_r1 := make_uninitialized(f32, field.FIELD_F32, degree(r1))
+        defer delete_polynomial(substituted_polynomial_r1)
+        substituted_polynomial_r2 := make_uninitialized(f32, field.FIELD_F32, degree(r2))
+        defer delete_polynomial(substituted_polynomial_r2)
+        for i in 0..=degree(r1)
+        {
+            substituted_polynomial_r1.coefficients[i] = eval(r1.coefficients[i], y)
+        }
+        for i in 0..=degree(r2)
+        {
+            substituted_polynomial_r2.coefficients[i] = eval(r2.coefficients[i], y)
+        }
+
+        x_values_r1 := real_roots(substituted_polynomial_r1)
+        defer delete(x_values_r1)
+        x_values_r2 := real_roots(substituted_polynomial_r2)
+        defer delete(x_values_r2)
+
+        // match up roots
+        for x1 in x_values_r1
+        {
+            for x2 in x_values_r2
+            {
+                if abs(x1 - x2) < 1e-6
+                {
+                    log.info("root x =", x1, "y =", y)
+                }
+            }
+        }
+    }
 }

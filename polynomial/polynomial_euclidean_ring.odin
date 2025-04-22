@@ -15,10 +15,10 @@ import "../algebraic_structures/integral_domain"
 This file contains the implementation of the euclidean ring algebraic structure for polynomials
 */
 
-// makes an euclidean ring structure for a polynomial given the coefficents field structure
-// note: to perform euclidean divison on a polynomial a multiplicative inverse must exist for the coefficents
-// since divison must be performed on the coefficents
-make_polynomial_euclidean_ring :: proc($T : typeid, coefficent_structure : $ST) ->
+// makes an euclidean ring structure for a polynomial given the coefficients field structure
+// note: to perform euclidean divison on a polynomial a multiplicative inverse must exist for the coefficients
+// since divison must be performed on the coefficients
+make_polynomial_euclidean_ring :: proc($T : typeid, coefficient_structure : $ST) ->
     euclidean_ring.EuclideanRing(Polynomial(T, ST))
     where intrinsics.type_is_subtype_of(ST, field.Field(T))
 {
@@ -34,7 +34,7 @@ make_polynomial_euclidean_ring :: proc($T : typeid, coefficent_structure : $ST) 
     }
 
     return euclidean_ring.EuclideanRing(Polynomial(T, ST)){
-        make_polynomial_integral_domain(T, coefficent_structure),
+        make_polynomial_integral_domain(T, coefficient_structure),
         l_div,
         l_norm
     }
@@ -81,31 +81,31 @@ div_field :: proc(
     {
         // determine the next coeficent in the quotent
         l.algebraic_structure.div(
-            &curr_quotent.coefficents[deg_l - deg_r - i],
-            curr_remainder.coefficents[deg_l - i],
-            r.coefficents[deg_r]
+            &curr_quotent.coefficients[deg_l - deg_r - i],
+            curr_remainder.coefficients[deg_l - i],
+            r.coefficients[deg_r]
         )
 
         // now we update the reaminder string
-        // compute the non leading coeficents we use curr_remainder.coefficents[deg_l - i]
+        // compute the non leading coeficents we use curr_remainder.coefficients[deg_l - i]
         // as a temporary register
         // we don't need it any more since after the divison we know it should be 0
         for j in 1..=deg_r
         {
             l.algebraic_structure.mul(
-                &curr_remainder.coefficents[deg_l - i],
-                curr_quotent.coefficents[deg_l - deg_r - i],
-                r.coefficents[deg_r - j]
+                &curr_remainder.coefficients[deg_l - i],
+                curr_quotent.coefficients[deg_l - deg_r - i],
+                r.coefficients[deg_r - j]
             )
             l.algebraic_structure.sub(
-                &curr_remainder.coefficents[deg_l - j - i],
-                curr_remainder.coefficents[deg_l - j - i],
-                curr_remainder.coefficents[deg_l - i]
+                &curr_remainder.coefficients[deg_l - j - i],
+                curr_remainder.coefficients[deg_l - j - i],
+                curr_remainder.coefficients[deg_l - i]
             )
         }
         // set the coeficent we just finished dividing to 0
         l.algebraic_structure.set(
-            &curr_remainder.coefficents[deg_l - i],
+            &curr_remainder.coefficients[deg_l - i],
             l.algebraic_structure.add_identity
         )
     }
@@ -146,14 +146,14 @@ div_numeric :: proc(
     for i in 0..<(deg_l - deg_r + 1)
     {
         // determine the next coeficent in the quotent
-        curr_quotent.coefficents[deg_l - deg_r - i] =
-            curr_remainder.coefficents[deg_l - i] / r.coefficents[deg_r]
+        curr_quotent.coefficients[deg_l - deg_r - i] =
+            curr_remainder.coefficients[deg_l - i] / r.coefficients[deg_r]
 
-        curr_remainder.coefficents[deg_l - i] = 0
+        curr_remainder.coefficients[deg_l - i] = 0
         for j in 1..=deg_r
         {
-            curr_remainder.coefficents[deg_l - j - i] -=
-                curr_quotent.coefficents[deg_l - deg_r - i] * r.coefficents[deg_r - j]
+            curr_remainder.coefficients[deg_l - j - i] -=
+                curr_quotent.coefficients[deg_l - deg_r - i] * r.coefficients[deg_r - j]
         }
     }
 
@@ -202,31 +202,31 @@ cancel_div_field :: proc(
     {
         // determine the next coeficent in the quotent
         l.algebraic_structure.cancel(
-            &curr_quotent.coefficents[deg_l - deg_r - i],
-            curr_remainder.coefficents[deg_l - i],
-            r.coefficents[deg_r]
+            &curr_quotent.coefficients[deg_l - deg_r - i],
+            curr_remainder.coefficients[deg_l - i],
+            r.coefficients[deg_r]
         )
 
         // now we update the reaminder string
-        // compute the non leading coeficents we use curr_remainder.coefficents[deg_l - i]
+        // compute the non leading coeficents we use curr_remainder.coefficients[deg_l - i]
         // as a temporary register
         // we don't need it any more since after the divison we know it should be 0
         for j in 1..=deg_r
         {
             l.algebraic_structure.mul(
-                &curr_remainder.coefficents[deg_l - i],
-                curr_quotent.coefficents[deg_l - deg_r - i],
-                r.coefficents[deg_r - j]
+                &curr_remainder.coefficients[deg_l - i],
+                curr_quotent.coefficients[deg_l - deg_r - i],
+                r.coefficients[deg_r - j]
             )
             l.algebraic_structure.sub(
-                &curr_remainder.coefficents[deg_l - j - i],
-                curr_remainder.coefficents[deg_l - j - i],
-                curr_remainder.coefficents[deg_l - i]
+                &curr_remainder.coefficients[deg_l - j - i],
+                curr_remainder.coefficients[deg_l - j - i],
+                curr_remainder.coefficients[deg_l - i]
             )
         }
         // set the coeficent we just finished dividing to 0
         l.algebraic_structure.set(
-            &curr_remainder.coefficents[deg_l - i],
+            &curr_remainder.coefficients[deg_l - i],
             l.algebraic_structure.add_identity
         )
     }
@@ -268,14 +268,14 @@ cancel_div_numeric :: proc(
     for i in 0..<(deg_l - deg_r + 1)
     {
         // determine the next coeficent in the quotent
-        curr_quotent.coefficents[deg_l - deg_r - i] =
-            curr_remainder.coefficents[deg_l - i] / r.coefficents[deg_r]
+        curr_quotent.coefficients[deg_l - deg_r - i] =
+            curr_remainder.coefficients[deg_l - i] / r.coefficients[deg_r]
 
-        curr_remainder.coefficents[deg_l - i] = 0
+        curr_remainder.coefficients[deg_l - i] = 0
         for j in 1..=deg_r
         {
-            curr_remainder.coefficents[deg_l - j - i] -=
-                curr_quotent.coefficents[deg_l - deg_r - i] * r.coefficents[deg_r - j]
+            curr_remainder.coefficients[deg_l - j - i] -=
+                curr_quotent.coefficients[deg_l - deg_r - i] * r.coefficients[deg_r - j]
         }
     }
 

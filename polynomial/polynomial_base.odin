@@ -15,8 +15,8 @@ import "../algebraic_structures/euclidean_ring"
 This file contains the implementation of the base algebraic structure for polynomials
 */
 
-// makes an base structure for a polynomial given the coefficents base structure
-make_polynomial_base :: proc($T : typeid, coefficents_structure : $ST) ->
+// makes an base structure for a polynomial given the coefficients base structure
+make_polynomial_base :: proc($T : typeid, coefficients_structure : $ST) ->
     base.Base(Polynomial(T, ST)) where intrinsics.type_is_subtype_of(ST, base.Base(T))
 {
     l_set :: proc(l : ^Polynomial(T, ST), r : Polynomial(T, ST))
@@ -64,7 +64,7 @@ eq_base :: proc(p : Polynomial($T, $ST), q : Polynomial(T, ST)) -> bool
     }
     for i in 0..=degree(p)
     {
-        if !p.algebraic_structure.eq(p.coefficents[i], q.coefficents[i]) { return false }
+        if !p.algebraic_structure.eq(p.coefficients[i], q.coefficients[i]) { return false }
     }
     return true
 }
@@ -81,7 +81,7 @@ eq_numeric :: proc(p : Polynomial($T, $ST), q : Polynomial(T, ST)) -> bool
     }
     for i in 0..=degree(p)
     {
-        if p.coefficents[i] != q.coefficents[i] { return false }
+        if p.coefficients[i] != q.coefficients[i] { return false }
     }
     return true
 }
@@ -103,7 +103,7 @@ set_base :: proc(l : ^Polynomial($T, $ST), r : Polynomial(T, ST))
 
     for i in 0..=degree(r)
     {
-        l.algebraic_structure.set(&l.coefficents[i], r.coefficents[i])
+        l.algebraic_structure.set(&l.coefficients[i], r.coefficients[i])
     }
 }
 
@@ -117,21 +117,21 @@ set_numeric :: proc(l : ^Polynomial($T, $ST), r : Polynomial(T, ST))
 
     for i in 0..=degree(r)
     {
-        l.coefficents[i] = r.coefficents[i]
+        l.coefficients[i] = r.coefficients[i]
     }
 }
 
-// deletes a polynomial also deletes the coefficents using the underlying algebraic structure
+// deletes a polynomial also deletes the coefficients using the underlying algebraic structure
 delete_polynomial :: proc(p : Polynomial($T, $ST))
 {
     when ST != field.NumericField(T)
     {
         for i in 0..=degree(p)
         {
-            p.algebraic_structure.delete(p.coefficents[i])
+            p.algebraic_structure.delete(p.coefficients[i])
         }
     }
-    delete(p.coefficents)
+    delete(p.coefficients)
 }
 
 // prints a polynomial to the input string builder
@@ -150,10 +150,10 @@ sb_print_polynomial_base :: proc(builder : ^strings.Builder, p : Polynomial($T, 
     }
     for i := degree(p); i >= 0; i -= 1
     {
-        if eq(p.coefficents[i], add_identity) { continue }
+        if eq(p.coefficients[i], add_identity) { continue }
         if i != degree(p) { fmt.sbprint(builder, " + ", sep = "") }
         fmt.sbprint(builder, "(")
-        print(builder, p.coefficents[i])
+        print(builder, p.coefficients[i])
         fmt.sbprint(builder, ")")
         if i != 0 { fmt.sbprint(builder, "x^", i, sep = "") }
     }
@@ -168,10 +168,10 @@ sb_print_polynomial_numeric :: proc(builder : ^strings.Builder, p : Polynomial($
     }
     for i := degree(p); i >= 0; i -= 1
     {
-        if eq(p.coefficents[i], add_identity) { continue }
+        if eq(p.coefficients[i], add_identity) { continue }
         if i != degree(p) { fmt.sbprint(builder, " + ", sep = "") }
         fmt.sbprint(builder, "(")
-        fmt.sbprint(builder, p.coefficents[i])
+        fmt.sbprint(builder, p.coefficients[i])
         fmt.sbprint(builder, ")")
         if i != 0 { fmt.sbprint(builder, "x^", i, sep = "") }
     }

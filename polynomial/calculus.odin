@@ -21,17 +21,17 @@ differentiate_ring :: proc(p : Polynomial($T, $ST)) -> Polynomial(T, ST)
 
     if degree(p) == -1
     {
-        return make_from_coefficents(T, p.algebraic_structure, []T{})
+        return make_from_coefficients(T, p.algebraic_structure, []T{})
     }
 
     ans := make_uninitialized(T, p.algebraic_structure, degree(p) - 1)
 
-    if degree(p) > 0 { p.algebraic_structure.set(&ans.coefficents[0], p.algebraic_structure.mul_identity) }
+    if degree(p) > 0 { p.algebraic_structure.set(&ans.coefficients[0], p.algebraic_structure.mul_identity) }
     for i in 1..<degree(p)
     {
         p.algebraic_structure.add(
-            &ans.coefficents[i],
-            ans.coefficents[i - 1],
+            &ans.coefficients[i],
+            ans.coefficients[i - 1],
             p.algebraic_structure.mul_identity
         )
     }
@@ -39,9 +39,9 @@ differentiate_ring :: proc(p : Polynomial($T, $ST)) -> Polynomial(T, ST)
     for i in 1..=degree(p)
     {
         p.algebraic_structure.mul(
-            &ans.coefficents[i - 1],
-            ans.coefficents[i - 1],
-            p.coefficents[i]
+            &ans.coefficients[i - 1],
+            ans.coefficients[i - 1],
+            p.coefficients[i]
         )
     }
 
@@ -55,13 +55,13 @@ differentiate_numeric :: proc(p : Polynomial($T, $ST)) -> Polynomial(T, ST)
 
     if degree(p) == -1
     {
-        return make_from_coefficents(T, p.algebraic_structure, []T{})
+        return make_from_coefficients(T, p.algebraic_structure, []T{})
     }
 
     ans := make_uninitialized(T, p.algebraic_structure, degree(p) - 1)
     for i in 1..=degree(p)
     {
-        ans.coefficents[i - 1] = T(i) * p.coefficents[i]
+        ans.coefficients[i - 1] = T(i) * p.coefficients[i]
     }
 
     return ans
@@ -80,12 +80,12 @@ integrate_field :: proc(p : Polynomial($T, $ST), c : T) -> Polynomial(T, ST)
 
     ans := make_uninitialized(T, p.algebraic_structure, degree(p) + 1)
 
-    p.algebraic_structure.set(&ans.coefficents[0], p.algebraic_structure.add_identity)
+    p.algebraic_structure.set(&ans.coefficients[0], p.algebraic_structure.add_identity)
     for i in 1..=(degree(p) + 1)
     {
         p.algebraic_structure.add(
-            &ans.coefficents[i],
-            ans.coefficents[i - 1],
+            &ans.coefficients[i],
+            ans.coefficients[i - 1],
             p.algebraic_structure.mul_identity
         )
     }
@@ -93,12 +93,12 @@ integrate_field :: proc(p : Polynomial($T, $ST), c : T) -> Polynomial(T, ST)
     for i in 0..=degree(p)
     {
         p.algebraic_structure.div(
-            &ans.coefficents[i + 1],
-            p.coefficents[i],
-            ans.coefficents[i + 1]
+            &ans.coefficients[i + 1],
+            p.coefficients[i],
+            ans.coefficients[i + 1]
         )
     }
-    p.algebraic_structure.set(&ans.coefficents[0], c)
+    p.algebraic_structure.set(&ans.coefficients[0], c)
     shrink_to_valid(&ans) // we only actually need to do this when c == 0
     return ans
 }
@@ -112,10 +112,10 @@ integrate_numeric :: proc(p : Polynomial($T, $ST), c : T)
 
     for i in 1..=(degree(p) + 1)
     {
-        ans.coefficents[i] = p.coefficents[i - 1] / T(i)
+        ans.coefficients[i] = p.coefficients[i - 1] / T(i)
     }
 
-    ans.coefficents[0] = c
+    ans.coefficients[0] = c
     shrink_to_valid(&ans) // we only actually need to do this when c == 0
     return ans
 }

@@ -15,7 +15,7 @@ import "../algebraic_structures/integral_domain"
 This file contains the implementation of the ring algebraic structure for polynomials
 */
 
-// makes an ring structure for a polynomial given the coefficents ring structure
+// makes an ring structure for a polynomial given the coefficients ring structure
 make_polynomial_ring :: proc($T : typeid, coeffiencet_structure : $ST) ->
     ring.Ring(Polynomial(T, ST)) where intrinsics.type_is_subtype_of(ST, ring.Ring(T))
 {
@@ -56,7 +56,7 @@ delete_polynomial_ring :: proc(v : ring.Ring(Polynomial($T, $ST)))
     delete_polynomial(v.mul_identity)
 }
 
-// makes an commutative ring structure for a polynomial given the coefficents commutative ring structure
+// makes an commutative ring structure for a polynomial given the coefficients commutative ring structure
 make_polynomial_commutative_ring :: proc($T : typeid, coeffiencet_structure : $ST) ->
     ring.CommutativeRing(Polynomial(T, ST)) where intrinsics.type_is_subtype_of(ST, ring.CommutativeRing(T))
 {
@@ -94,15 +94,15 @@ add_ring :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(T, ST), r : Polynomi
     {
         if i <= deg_l && i <= deg_r
         {
-            add(&ans.coefficents[i], l.coefficents[i], r.coefficents[i])
+            add(&ans.coefficients[i], l.coefficients[i], r.coefficients[i])
         }
         else if i <= deg_l
         {
-            set(&ans.coefficents[i], l.coefficents[i])
+            set(&ans.coefficients[i], l.coefficients[i])
         }
         else
         {
-            set(&ans.coefficents[i], r.coefficents[i])
+            set(&ans.coefficients[i], r.coefficients[i])
         }
     }
     shrink_to_valid(ans)
@@ -125,15 +125,15 @@ add_numeric :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(T, ST), r : Polyn
     {
         if i <= deg_l && i <= deg_r
         {
-            ans.coefficents[i] = l.coefficents[i] + r.coefficents[i]
+            ans.coefficients[i] = l.coefficients[i] + r.coefficients[i]
         }
         else if i <= deg_l
         {
-            ans.coefficents[i] = l.coefficents[i]
+            ans.coefficients[i] = l.coefficients[i]
         }
         else
         {
-            ans.coefficents[i] = r.coefficents[i]
+            ans.coefficients[i] = r.coefficients[i]
         }
     }
     shrink_to_valid(ans)
@@ -163,15 +163,15 @@ sub_ring :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(T, ST), r : Polynomi
     {
         if i <= deg_l && i <= deg_r
         {
-            sub(&ans.coefficents[i], l.coefficents[i], r.coefficents[i])
+            sub(&ans.coefficients[i], l.coefficients[i], r.coefficients[i])
         }
         else if i <= deg_l
         {
-            set(&ans.coefficents[i], l.coefficents[i])
+            set(&ans.coefficients[i], l.coefficients[i])
         }
         else
         {
-            neg(&ans.coefficents[i], r.coefficents[i])
+            neg(&ans.coefficients[i], r.coefficients[i])
         }
     }
     shrink_to_valid(ans)
@@ -194,15 +194,15 @@ sub_numeric :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(T, ST), r : Polyn
     {
         if i <= deg_l && i <= deg_r
         {
-            ans.coefficents[i] = l.coefficents[i] - r.coefficents[i]
+            ans.coefficients[i] = l.coefficients[i] - r.coefficients[i]
         }
         else if i <= deg_l
         {
-            ans.coefficents[i] = l.coefficents[i]
+            ans.coefficients[i] = l.coefficients[i]
         }
         else
         {
-            ans.coefficents[i] = -r.coefficents[i]
+            ans.coefficients[i] = -r.coefficients[i]
         }
     }
     shrink_to_valid(ans)
@@ -237,22 +237,22 @@ mul_self_ring :: proc(ans : ^Polynomial($T, $ST))
                 continue
             }
 
-            mul(&temp_var, ans.coefficents[l_index], ans.coefficents[r_index])
+            mul(&temp_var, ans.coefficients[l_index], ans.coefficients[r_index])
 
             if j == j_min
             {
                 // first itteration
-                set(&ans.coefficents[i], temp_var)
+                set(&ans.coefficients[i], temp_var)
                 if j_min != j_max
                 {
                     // in the special case where the 2 polynomials are in the same memory
                     // we need to double the first multiplication cause we cannot compute the last one
-                    add(&ans.coefficents[i], ans.coefficents[i], temp_var)
+                    add(&ans.coefficients[i], ans.coefficients[i], temp_var)
                 }
             }
             else
             {
-                add(&ans.coefficents[i], ans.coefficents[i], temp_var)
+                add(&ans.coefficients[i], ans.coefficients[i], temp_var)
             }
         }
     }
@@ -284,21 +284,21 @@ mul_self_numeric :: proc(ans : ^Polynomial($T, $ST))
                 continue
             }
 
-            temp_var := ans.coefficents[l_index] * ans.coefficents[r_index]
+            temp_var := ans.coefficients[l_index] * ans.coefficients[r_index]
             if j == j_min
             {
                 // first itteration
-                ans.coefficents[i] = temp_var
+                ans.coefficients[i] = temp_var
                 if j_min != j_max
                 {
                     // in the special case where the 2 polynomials are in the same memory
                     // we need to double the first multiplication cause we cannot compute the last one
-                    ans.coefficents[i] += temp_var
+                    ans.coefficients[i] += temp_var
                 }
             }
             else
             {
-                ans.coefficents[i] += temp_var
+                ans.coefficients[i] += temp_var
             }
         }
     }
@@ -327,18 +327,18 @@ mul_self_by_other_ring_left :: proc(ans : ^Polynomial($T, $ST), r : Polynomial(T
             r_index := j
 
             mul(&temp_var,
-                ans.coefficents[l_index],
-                r.coefficents[r_index]
+                ans.coefficients[l_index],
+                r.coefficients[r_index]
             )
 
             if j == j_min
             {
                 // first itteration
-                set(&ans.coefficents[i], temp_var)
+                set(&ans.coefficients[i], temp_var)
             }
             else
             {
-                add(&ans.coefficents[i], ans.coefficents[i], temp_var)
+                add(&ans.coefficients[i], ans.coefficients[i], temp_var)
             }
         }
     }
@@ -369,18 +369,18 @@ mul_self_by_other_ring_right :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(
             r_index := i - j
 
             mul(&temp_var,
-                l.coefficents[l_index],
-                ans.coefficents[r_index]
+                l.coefficients[l_index],
+                ans.coefficients[r_index]
             )
 
             if j == j_min
             {
                 // first itteration
-                set(&ans.coefficents[i], temp_var)
+                set(&ans.coefficients[i], temp_var)
             }
             else
             {
-                add(&ans.coefficents[i], ans.coefficents[i], temp_var)
+                add(&ans.coefficients[i], ans.coefficients[i], temp_var)
             }
         }
     }
@@ -409,17 +409,17 @@ mul_self_by_other_numeric :: proc(ans : ^Polynomial($T, $ST), r : Polynomial(T, 
             if j == j_min
             {
                 // first itteration
-                ans.coefficents[i] = ans.coefficents[l_index] * r.coefficents[r_index]
+                ans.coefficients[i] = ans.coefficients[l_index] * r.coefficients[r_index]
             }
             else
             {
-                ans.coefficents[i] += ans.coefficents[l_index] * r.coefficents[r_index]
+                ans.coefficients[i] += ans.coefficients[l_index] * r.coefficients[r_index]
             }
         }
     }
 }
 
-// polynomial multiplication where ans, l and r are indepeneted ie they there coefficents are all in differnt memory
+// polynomial multiplication where ans, l and r are indepeneted ie they there coefficients are all in differnt memory
 mul_independent_ring :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(T, ST), r : Polynomial(T, ST))
     where intrinsics.type_is_subtype_of(ST, ring.Ring(T))
 {
@@ -431,24 +431,24 @@ mul_independent_ring :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(T, ST), 
     resize_or_init_polynomial(ans, l.algebraic_structure, deg_l + deg_r)
 
     // in this case we do not require any temporary variables
-    // we use ans.coefficents[0] as a temporary variable so we do not need to do any allocations
+    // we use ans.coefficients[0] as a temporary variable so we do not need to do any allocations
     for i in 1..=(deg_l + deg_r)
     {
-        set(&ans.coefficents[i], add_identity)
+        set(&ans.coefficients[i], add_identity)
         for j in max(0, i - deg_r)..=min(i, deg_l)
         {
             l_index := j
             r_index := i - j
 
-            mul(&ans.coefficents[0], l.coefficents[l_index], r.coefficents[r_index])
-            add(&ans.coefficents[i], ans.coefficents[i], ans.coefficents[0])
+            mul(&ans.coefficients[0], l.coefficients[l_index], r.coefficients[r_index])
+            add(&ans.coefficients[i], ans.coefficients[i], ans.coefficients[0])
         }
     }
-    // set ans.coefficents[0] as we where using it as a temporary variable
-    mul(&ans.coefficents[0], l.coefficents[0], r.coefficents[0])
+    // set ans.coefficients[0] as we where using it as a temporary variable
+    mul(&ans.coefficients[0], l.coefficients[0], r.coefficients[0])
 }
 
-// polynomial multiplication where ans, l and r are indepeneted ie they there coefficents are all in differnt memory
+// polynomial multiplication where ans, l and r are indepeneted ie they there coefficients are all in differnt memory
 mul_independent_numeric :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(T, ST), r : Polynomial(T, ST))
     where ST == field.NumericField(T) || ST == euclidean_ring.NumericEuclideanRing(T)
 {
@@ -461,15 +461,15 @@ mul_independent_numeric :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(T, ST
     // we use 0 as a temporary variable so we do not need to do any allocations
     for i in 1..=(deg_l + deg_r)
     {
-        ans.coefficents[i] = 0
+        ans.coefficients[i] = 0
         for j in max(0, i - deg_r)..=min(i, deg_l)
         {
             l_index := j
             r_index := i - j
-            ans.coefficents[i] += l.coefficents[l_index] * r.coefficents[r_index]
+            ans.coefficients[i] += l.coefficients[l_index] * r.coefficients[r_index]
         }
     }
-    ans.coefficents[0] = l.coefficents[0] * r.coefficents[0]
+    ans.coefficients[0] = l.coefficients[0] * r.coefficients[0]
 }
 
 // polynomial multiplication sets ans = l * r
@@ -489,18 +489,18 @@ mul_ring :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(T, ST), r : Polynomi
     {
         resize_or_init_polynomial(ans, l.algebraic_structure, -1)
     }
-    else if rawptr(raw_data(ans.coefficents)) != rawptr(raw_data(l.coefficents)) &&
-        rawptr(raw_data(ans.coefficents)) != rawptr(raw_data(r.coefficents))
+    else if rawptr(raw_data(ans.coefficients)) != rawptr(raw_data(l.coefficients)) &&
+        rawptr(raw_data(ans.coefficients)) != rawptr(raw_data(r.coefficients))
     {
         mul_independent_ring(ans, l, r)
     }
-    else if rawptr(raw_data(ans.coefficents)) == rawptr(raw_data(l.coefficents)) &&
-        rawptr(raw_data(l.coefficents)) != rawptr(raw_data(r.coefficents))
+    else if rawptr(raw_data(ans.coefficients)) == rawptr(raw_data(l.coefficients)) &&
+        rawptr(raw_data(l.coefficients)) != rawptr(raw_data(r.coefficients))
     {
         mul_self_by_other_ring_left(ans, r)
     }
-    else if rawptr(raw_data(ans.coefficents)) == rawptr(raw_data(r.coefficents)) &&
-        rawptr(raw_data(l.coefficents)) != rawptr(raw_data(r.coefficents))
+    else if rawptr(raw_data(ans.coefficients)) == rawptr(raw_data(r.coefficients)) &&
+        rawptr(raw_data(l.coefficients)) != rawptr(raw_data(r.coefficients))
     {
         mul_self_by_other_ring_right(ans, l)
     }
@@ -521,18 +521,18 @@ mul_numeric :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(T, ST), r : Polyn
     {
         resize_or_init_polynomial(ans, l.algebraic_structure, -1)
     }
-    else if rawptr(raw_data(ans.coefficents)) != rawptr(raw_data(l.coefficents)) &&
-        rawptr(raw_data(ans.coefficents)) != rawptr(raw_data(r.coefficents))
+    else if rawptr(raw_data(ans.coefficients)) != rawptr(raw_data(l.coefficients)) &&
+        rawptr(raw_data(ans.coefficients)) != rawptr(raw_data(r.coefficients))
     {
         mul_independent_numeric(ans, l, r)
     }
-    else if rawptr(raw_data(ans.coefficents)) == rawptr(raw_data(l.coefficents)) &&
-        rawptr(raw_data(l.coefficents)) != rawptr(raw_data(r.coefficents))
+    else if rawptr(raw_data(ans.coefficients)) == rawptr(raw_data(l.coefficients)) &&
+        rawptr(raw_data(l.coefficients)) != rawptr(raw_data(r.coefficients))
     {
         mul_self_by_other_numeric(ans, r)
     }
-    else if rawptr(raw_data(ans.coefficents)) == rawptr(raw_data(r.coefficents)) &&
-        rawptr(raw_data(l.coefficents)) != rawptr(raw_data(r.coefficents))
+    else if rawptr(raw_data(ans.coefficients)) == rawptr(raw_data(r.coefficients)) &&
+        rawptr(raw_data(l.coefficients)) != rawptr(raw_data(r.coefficients))
     {
         mul_self_by_other_numeric(ans, l)
     }
@@ -557,11 +557,11 @@ neg :: proc(ans : ^Polynomial($T, $ST), l : Polynomial(T, ST))
     {
         when ST == field.NumericField(T) || ST == euclidean_ring.NumericEuclideanRing(T)
         {
-            ans.coefficents[i] = -l.coefficents[i]
+            ans.coefficients[i] = -l.coefficients[i]
         }
         else
         {
-            ans.algebraic_structure.neg(&ans.coefficents[i], l.coefficents[i])
+            ans.algebraic_structure.neg(&ans.coefficients[i], l.coefficients[i])
         }
     }
     shrink_to_valid(ans)
@@ -579,11 +579,11 @@ mul_ident_polynomial :: proc($T : typeid, algebraic_structure : $ST) -> Polynomi
     ans := make_uninitialized(T, algebraic_structure, 0)
     when ST == field.NumericField(T) || ST == euclidean_ring.NumericEuclideanRing(T)
     {
-        ans.coefficents[0] = 1
+        ans.coefficients[0] = 1
     }
     else
     {
-        algebraic_structure.set(&ans.coefficents[0], algebraic_structure.mul_identity)
+        algebraic_structure.set(&ans.coefficients[0], algebraic_structure.mul_identity)
     }
     return ans
 }

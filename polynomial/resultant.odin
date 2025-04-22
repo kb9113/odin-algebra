@@ -30,7 +30,7 @@ resultant :: proc(p : Polynomial($T, $ST), q : Polynomial(T, ST)) -> T
 
         if degree(sr) == 0
         {
-            p.algebraic_structure.set(&ans, sr.coefficents[degree(sr)])
+            p.algebraic_structure.set(&ans, sr.coefficients[degree(sr)])
             break
         }
         if degree(sr) == -1
@@ -99,7 +99,7 @@ next_sub_resultant :: proc(it : ^SubResultantPseudoRemainderIterator($T, $ST)) -
         tmp_var : T
 
         // compute w_i
-        it.r_0.algebraic_structure.set(&tmp_var, it.r_0.coefficents[degree(it.r_0)])
+        it.r_0.algebraic_structure.set(&tmp_var, it.r_0.coefficients[degree(it.r_0)])
         it.r_0.algebraic_structure.neg(&tmp_var, tmp_var)
         ring.integer_pow(&tmp_var, tmp_var, uint(it.d_0), it.r_0.algebraic_structure)
 
@@ -110,7 +110,7 @@ next_sub_resultant :: proc(it : ^SubResultantPseudoRemainderIterator($T, $ST)) -
         it.r_0.algebraic_structure.set(&tmp_var, it.w)
         ring.integer_pow(&tmp_var, tmp_var, uint(it.d_1), it.r_0.algebraic_structure)
 
-        it.r_0.algebraic_structure.set(&it.b, it.r_0.coefficents[degree(it.r_0)])
+        it.r_0.algebraic_structure.set(&it.b, it.r_0.coefficients[degree(it.r_0)])
         it.r_0.algebraic_structure.neg(&it.b, it.b)
 
         it.r_0.algebraic_structure.mul(&it.b, it.b, tmp_var)
@@ -119,7 +119,7 @@ next_sub_resultant :: proc(it : ^SubResultantPseudoRemainderIterator($T, $ST)) -
     }
 
     lambda : T
-    it.r_0.algebraic_structure.set(&lambda, it.r_1.coefficents[degree(it.r_1)])
+    it.r_0.algebraic_structure.set(&lambda, it.r_1.coefficients[degree(it.r_1)])
     ring.integer_pow(&lambda, lambda, uint(it.d_1 + 1), it.r_0.algebraic_structure)
     s_mul(&it.r_0, it.r_0, lambda)
     it.r_0.algebraic_structure.delete(lambda)

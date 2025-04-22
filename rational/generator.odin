@@ -6,20 +6,20 @@ import "core:strings"
 
 RationalGeneratorInfo :: struct($T : typeid, $ST : typeid)
 {
-    coefficent_generator : prop_based.Generator(T),
-    coefficent_algebraic_structure : ST
+    coefficient_generator : prop_based.Generator(T),
+    coefficient_algebraic_structure : ST
 }
 
 // makes a generator for rationals given a generator of the numerator and denominator
 // used for property based testing of rationals
 make_generator :: proc(
-    coefficent_generator : prop_based.Generator($T),
-    coefficent_algebraic_structure : $ST
+    coefficient_generator : prop_based.Generator($T),
+    coefficient_algebraic_structure : $ST
 ) -> prop_based.Generator(Rational(T, ST))
 {
     generator_info_ptr := new(RationalGeneratorInfo(T, ST))
-    generator_info_ptr.coefficent_generator = coefficent_generator
-    generator_info_ptr.coefficent_algebraic_structure = coefficent_algebraic_structure
+    generator_info_ptr.coefficient_generator = coefficient_generator
+    generator_info_ptr.coefficient_algebraic_structure = coefficient_algebraic_structure
 
     generate_rat :: proc(generator_info_raw : rawptr) -> Rational(T, ST)
     {
@@ -28,26 +28,26 @@ make_generator :: proc(
         numerator : T
         denominator : T
 
-        generator_info.coefficent_algebraic_structure.set(
-            &numerator, generator_info.coefficent_generator.generate(generator_info.coefficent_generator.raw)
+        generator_info.coefficient_algebraic_structure.set(
+            &numerator, generator_info.coefficient_generator.generate(generator_info.coefficient_generator.raw)
         )
-        generator_info.coefficent_algebraic_structure.set(
-            &denominator, generator_info.coefficent_generator.generate(generator_info.coefficent_generator.raw)
+        generator_info.coefficient_algebraic_structure.set(
+            &denominator, generator_info.coefficient_generator.generate(generator_info.coefficient_generator.raw)
         )
 
-        for generator_info.coefficent_algebraic_structure.eq(
-            denominator, generator_info.coefficent_algebraic_structure.add_identity
+        for generator_info.coefficient_algebraic_structure.eq(
+            denominator, generator_info.coefficient_algebraic_structure.add_identity
         )
         {
-            new_denominator := generator_info.coefficent_generator.generate(generator_info.coefficent_generator.raw)
-            generator_info.coefficent_algebraic_structure.set(&denominator, new_denominator)
-            generator_info.coefficent_algebraic_structure.delete(new_denominator)
+            new_denominator := generator_info.coefficient_generator.generate(generator_info.coefficient_generator.raw)
+            generator_info.coefficient_algebraic_structure.set(&denominator, new_denominator)
+            generator_info.coefficient_algebraic_structure.delete(new_denominator)
         }
 
         ans := make_rational(
             numerator,
             denominator,
-            generator_info.coefficent_algebraic_structure
+            generator_info.coefficient_algebraic_structure
         )
 
         return ans
@@ -61,26 +61,26 @@ make_generator :: proc(
         numerator : T
         denominator : T
 
-        generator_info.coefficent_algebraic_structure.set(
-            &numerator, generator_info.coefficent_generator.reduce(generator_info.coefficent_generator.raw, r.numerator)
+        generator_info.coefficient_algebraic_structure.set(
+            &numerator, generator_info.coefficient_generator.reduce(generator_info.coefficient_generator.raw, r.numerator)
         )
-        generator_info.coefficent_algebraic_structure.set(
-            &denominator, generator_info.coefficent_generator.reduce(generator_info.coefficent_generator.raw, r.denominator)
+        generator_info.coefficient_algebraic_structure.set(
+            &denominator, generator_info.coefficient_generator.reduce(generator_info.coefficient_generator.raw, r.denominator)
         )
 
-        for generator_info.coefficent_algebraic_structure.eq(
-            denominator, generator_info.coefficent_algebraic_structure.add_identity
+        for generator_info.coefficient_algebraic_structure.eq(
+            denominator, generator_info.coefficient_algebraic_structure.add_identity
         )
         {
-            new_denominator := generator_info.coefficent_generator.generate(generator_info.coefficent_generator.raw)
-            generator_info.coefficent_algebraic_structure.set(&denominator, new_denominator)
-            generator_info.coefficent_algebraic_structure.delete(new_denominator)
+            new_denominator := generator_info.coefficient_generator.generate(generator_info.coefficient_generator.raw)
+            generator_info.coefficient_algebraic_structure.set(&denominator, new_denominator)
+            generator_info.coefficient_algebraic_structure.delete(new_denominator)
         }
 
         ans := make_rational(
             numerator,
             denominator,
-            generator_info.coefficent_algebraic_structure
+            generator_info.coefficient_algebraic_structure
         )
 
         return ans

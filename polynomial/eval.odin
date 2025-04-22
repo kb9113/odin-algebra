@@ -32,25 +32,25 @@ eval_same_type :: proc(p : Polynomial($T, $ST), x : T) -> T
         }
     }
 
-    ans := p.coefficents[degree(p)]
+    ans := p.coefficients[degree(p)]
 
     for i := degree(p) - 1; i >= 0; i -= 1
     {
         when ST == field.NumericField(T)
         {
             ans *= x
-            ans += p.coefficents[i]
+            ans += p.coefficients[i]
         }
         else
         {
             p.algebraic_structure.mul(&ans, ans, x)
-            p.algebraic_structure.add(&ans, ans, p.coefficents[i])
+            p.algebraic_structure.add(&ans, ans, p.coefficients[i])
         }
     }
     return ans
 }
 
-// use this when the expected output type of your function is differnet to the coefficents type
+// use this when the expected output type of your function is different to the coefficients type
 eval_different_type :: proc(p : Polynomial($T, $ST), x : $V, s_mul : proc(s : V, t : T) -> V) ->
     V where intrinsics.type_is_numeric(V)
 {
@@ -60,7 +60,7 @@ eval_different_type :: proc(p : Polynomial($T, $ST), x : $V, s_mul : proc(s : V,
     x_n : V = 1
     for i in 0..=degree(p)
     {
-        ans += s_mul(x_n, p.coefficents[i])
+        ans += s_mul(x_n, p.coefficients[i])
         x_n *= x
     }
     return ans
@@ -73,7 +73,7 @@ roots :: proc{
     roots_complex32,
 }
 
-roots_numeric :: proc($C : typeid, p : Polynomial($T, field.NumericField(T))) -> []C
+roots_numeric :: proc($C : typeid, p : Polynomial($T, $ST), max_iterations := 100) -> []C
 {
     assert(is_valid(p))
 
@@ -95,7 +95,8 @@ roots_numeric :: proc($C : typeid, p : Polynomial($T, field.NumericField(T))) ->
 
     // find roots
     cumulative_change : T = 1
-    for cumulative_change > 1e-6
+    i := 0
+    for cumulative_change > 1e-6 && i < max_iterations
     {
         cumulative_change = 0
         for i in 0..<len(roots)
@@ -106,27 +107,28 @@ roots_numeric :: proc($C : typeid, p : Polynomial($T, field.NumericField(T))) ->
                 if i == j { continue }
                 denominator *= roots[i] - roots[j]
             }
-            f_x := eval(p, roots[i], s_mul) / C(p.coefficents[degree])
+            f_x := eval(p, roots[i], s_mul) / C(p.coefficients[degree])
             roots[i] -= f_x / denominator
             cumulative_change += cmplx.abs(f_x / denominator)
         }
+        i += 1
     }
     return roots[:]
 }
 
-roots_complex128 :: proc(p : Polynomial($T, field.NumericField(T))) -> []complex128
+roots_complex128 :: proc(p : Polynomial($T, $ST)) -> []complex128
     where T == f64 || T == complex128
 {
     return roots_numeric(complex128, p)
 }
 
-roots_complex64 :: proc(p : Polynomial($T, field.NumericField(T))) -> []complex64
+roots_complex64 :: proc(p : Polynomial($T, $ST)) -> []complex64
     where T == f32 || T == complex64
 {
     return roots_numeric(complex64, p)
 }
 
-roots_complex32 :: proc(p : Polynomial($T, field.NumericField(T))) -> []complex32
+roots_complex32 :: proc(p : Polynomial($T, $ST)) -> []complex32
     where T == f16 || T == complex32
 {
     return roots_numeric(complex32, p)
@@ -134,7 +136,7 @@ roots_complex32 :: proc(p : Polynomial($T, field.NumericField(T))) -> []complex3
 
 
 // uses the durand–kerner method to return the complex roots then filters the roots to only roots with small imaginary components
-real_roots :: proc(p : Polynomial($T, field.NumericField(T))) -> []T
+real_roots :: proc(p : Polynomial($T, $ST)) -> []T
     where intrinsics.type_is_float(T)
 {
     complex_roots := roots(p)
