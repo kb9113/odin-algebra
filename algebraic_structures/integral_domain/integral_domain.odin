@@ -1,3 +1,9 @@
+/*
+Interface for a Integral Domain
+- cancel - called to perform a perfect division if left := a * right after cancel is called ans == a.
+- this function is only called when the cancelation definitely works.
+- this functions can be called where 2 or 3 input parameters point to the same piece of memory.
+*/
 package integral_domain
 import "core:mem"
 import "../ring"
@@ -6,8 +12,8 @@ import "core:fmt"
 /*
 Interface for a Integral Domain:
 - cancel - called to perform a perfect division if left := a * right after cancel is called ans == a.
-- this function is only called when the cancelation definently works.
-- this functions can be called where 2 or 3 input paramters point to the same piece of memory.
+- this function is only called when the cancelation definitely works.
+- this functions can be called where 2 or 3 input parameters point to the same piece of memory.
 */
 IntegralDomain :: struct($T : typeid)
 {

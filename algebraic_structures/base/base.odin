@@ -1,3 +1,11 @@
+/*
+Base interface which everything builds upon:
+- set - called to perform the operation ans = right
+- delete - called to free the memory used by a value of type T
+- eq - called to perform the operation left == right
+- print - called to write a printable version of a value of type T to a string builder
+- set can be called where ans has not yet been "initialized"
+*/
 package base
 import "core:mem"
 import "core:strings"
@@ -10,7 +18,7 @@ Interface for Base:
 - delete - called to free the memory used by a value of type T
 - eq - called to perform the operation left == right
 - print - called to write a printable version of a value of type T to a string builder
-- set can be called where ans has not yet been "initalized"
+- set can be called where ans has not yet been "initialized"
 */
 Base :: struct($T : typeid)
 {

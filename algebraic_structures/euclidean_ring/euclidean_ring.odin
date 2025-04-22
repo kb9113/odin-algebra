@@ -1,17 +1,23 @@
+/*
+Interface for a Euclidean Ring
+- euclidean_div - called to perform the operation euclidean_div operation such that left == right * quotient + remainder where remainder == 0 or norm(remainder) < norm(right)
+- norm - rough measure of size for a type
+- all functions can be called where 2 or 3 input parameters point to the same piece of memory.
+*/
 package euclidean_ring
 import "../integral_domain"
 import "core:mem"
 
 /*
 Interface for a Euclidean Ring:
-- euclidean_div - called to perform the operation euclidean_div operation such that left == right * quotent + remainder where remainder == 0 or norm(remainder) < norm(right)
-- norm - rough messure of size for a type
-- all functions can be called where 2 or 3 input paramters point to the same piece of memory.
+- euclidean_div - called to perform the operation euclidean_div operation such that left == right * quotient + remainder where remainder == 0 or norm(remainder) < norm(right)
+- norm - rough measure of size for a type
+- all functions can be called where 2 or 3 input parameters point to the same piece of memory.
 */
 EuclideanRing :: struct($T : typeid)
 {
     using integral_domain : integral_domain.IntegralDomain(T),
-    euclidean_div : proc(quotent : ^T, remainder : ^T, left : T, right : T),
+    euclidean_div : proc(quotient : ^T, remainder : ^T, left : T, right : T),
     norm : proc(left : T) -> u64
 }
 

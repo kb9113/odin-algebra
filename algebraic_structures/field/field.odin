@@ -1,3 +1,9 @@
+/*
+Interface for a Field
+- div - called to perform the operation ans = left / right
+- mul_inverse - called to perform ans = 1 / left
+- all functions can be called where 2 or 3 input parameters point to the same piece of memory.
+*/
 package field
 import "core:math"
 import "core:mem"
@@ -7,7 +13,7 @@ import "../euclidean_ring"
 Interface for a Field:
 - div - called to perform the operation ans = left / right
 - mul_inverse - called to perform ans = 1 / left
-- all functions can be called where 2 or 3 input paramters point to the same piece of memory.
+- all functions can be called where 2 or 3 input parameters point to the same piece of memory.
 */
 Field :: struct($T : typeid)
 {

@@ -85,5 +85,5 @@ for y in y_values
             }
         }
     }
-}coefficientcoefficientcoefficientcoefficient
+}
 ```

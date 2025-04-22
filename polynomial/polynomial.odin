@@ -1,4 +1,4 @@
-// implementation of polynomials field over some underling algebraic structures.
+// Implementation of polynomials field over some underling algebraic structures.
 package polynomial
 import "core:math"
 import "core:math/cmplx"

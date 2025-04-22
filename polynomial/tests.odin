@@ -73,7 +73,7 @@ test_polynomial_over_polynomial_over_i64_integral_safety_axioms :: proc(t: ^test
 @(test)
 test_calc_prop_based :: proc(t: ^testing.T)
 {
-    intergrate_then_differentiate :: proc(f : integral_domain.IntegralDomain(Polynomial(f32, field.Field(f32))), a : Polynomial(f32, field.Field(f32))) -> bool
+    integrate_then_differentiate :: proc(f : integral_domain.IntegralDomain(Polynomial(f32, field.Field(f32))), a : Polynomial(f32, field.Field(f32))) -> bool
     {
         int := integrate(a, a.algebraic_structure.add_identity)
         defer delete_polynomial(int)
@@ -88,7 +88,7 @@ test_calc_prop_based :: proc(t: ^testing.T)
         return f.eq(diff, a)
     }
 
-    differentiate_then_intergrate :: proc(f : integral_domain.IntegralDomain(Polynomial(f32, field.Field(f32))), a : Polynomial(f32, field.Field(f32))) -> bool
+    differentiate_then_integrate :: proc(f : integral_domain.IntegralDomain(Polynomial(f32, field.Field(f32))), a : Polynomial(f32, field.Field(f32))) -> bool
     {
         if degree(a) == -1
         {
@@ -117,12 +117,12 @@ test_calc_prop_based :: proc(t: ^testing.T)
 
     prop_based.check(
         t,
-        poly_id, poly_generator, intergrate_then_differentiate
+        poly_id, poly_generator, integrate_then_differentiate
     )
 
     prop_based.check(
         t,
-        poly_id, poly_generator, differentiate_then_intergrate
+        poly_id, poly_generator, differentiate_then_integrate
     )
 }
 

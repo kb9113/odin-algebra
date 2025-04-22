@@ -1,4 +1,4 @@
-// implementation of the rational field over some underling ring.
+// Implementation of the rational field over some underling ring.
 package rational
 import "../algebraic_structures/euclidean_ring"
 import "../algebraic_structures/field"

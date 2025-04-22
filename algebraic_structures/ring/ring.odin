@@ -1,3 +1,13 @@
+/*
+Interface for a Ring and CommutativeRing
+- add - called to perform the operation ans = left + right
+- sub - called to perform the operation ans = left - right
+- mul - called to perform the operation ans = left * right
+- neg - called to perform the operation ans = -left
+- add_identity - a + additive_identity == a for all a
+- mul_identity - a * mul_identity == a for all a
+- all functions can be called where 2 or 3 input parameters point to the same piece of memory
+*/
 package ring
 import "core:mem"
 import "../base"
@@ -12,7 +22,7 @@ Interface for a ring:
 - neg - called to perform the operation ans = -left
 - add_identity - a + additive_identity == a for all a
 - mul_identity - a * mul_identity == a for all a
-- all functions can be called where 2 or 3 input paramters point to the same piece of memory
+- all functions can be called where 2 or 3 input parameters point to the same piece of memory
 */
 Ring :: struct($T : typeid)
 {
@@ -26,7 +36,7 @@ Ring :: struct($T : typeid)
 }
 
 /*
-has no additional operations just indicates to the type system that addtion is commutative
+Has no additional operations above what Ring has just indicates to the type system that addition is commutative
 */
 CommutativeRing :: struct($T : typeid)
 {
