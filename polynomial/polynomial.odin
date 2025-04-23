@@ -40,19 +40,19 @@ make_uninitialized :: proc{
     make_uninitialized_algebraic_structure,
 }
 
-make_uninitialized_numeric :: proc($T : typeid, degree : int) ->
+make_uninitialized_numeric :: proc($T : typeid, degree : int, loc := #caller_location) ->
     Polynomial(T, field.NumericField(T)) where intrinsics.type_is_numeric(T)
 {
     ans := Polynomial(T, field.NumericField(T)){}
-    ans.coefficients = make([dynamic]T, degree + 1)
+    ans.coefficients = make([dynamic]T, degree + 1, loc = loc)
     return ans
 }
 
-make_uninitialized_algebraic_structure :: proc($T : typeid, algebraic_structure : $ST, degree : int) ->
+make_uninitialized_algebraic_structure :: proc($T : typeid, algebraic_structure : $ST, degree : int, loc := #caller_location) ->
     Polynomial(T, ST)
 {
     ans := Polynomial(T, ST){}
-    ans.coefficients = make([dynamic]T, degree + 1)
+    ans.coefficients = make([dynamic]T, degree + 1, loc = loc)
     ans.algebraic_structure = algebraic_structure
     return ans
 }

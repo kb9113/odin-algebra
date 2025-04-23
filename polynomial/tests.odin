@@ -6,6 +6,7 @@ import "base:intrinsics"
 import "base:builtin"
 import "base:runtime"
 import "core:slice"
+import "core:math/cmplx"
 import sa "core:container/small_array"
 import "../prop_based"
 import "../algebraic_structures/field"
@@ -700,9 +701,9 @@ test_eval_2 :: proc(t: ^testing.T)
 @(test)
 test_roots :: proc(t: ^testing.T)
 {
-    s_mul :: proc(s : complex64, t : f32) -> complex64
+    s_add :: proc(ans : ^complex64, t : f32, s : complex64)
     {
-        return s * complex64(t)
+        ans^ = s + complex64(t)
     }
 
     p := make_from_coefficients(f32, []f32{-1, -2, 3, 4})
@@ -711,7 +712,7 @@ test_roots :: proc(t: ^testing.T)
     testing.expect(t, len(rs) == 3)
     for r in rs
     {
-        root_value := eval(p, r, s_mul)
+        root_value := eval(p, r, field.NumericField(complex64){}, s_add)
         testing.expect(t, abs(root_value) < 1e-6)
     }
     delete(rs)
@@ -872,13 +873,16 @@ test_polynomial_pow :: proc(t: ^testing.T)
 }
 
 @(test)
-test_multi_variable_solve :: proc(t: ^testing.T)
+test_solve_system :: proc(t: ^testing.T)
 {
     id := make_polynomial_integral_domain(f32, field.FIELD_F32)
     defer delete_polynomial_integral_domain(id)
 
+    VAR1TYPE :: Polynomial(f32, field.Field(f32))
+    system : [2]Polynomial(VAR1TYPE, integral_domain.IntegralDomain(VAR1TYPE))
+
     //x^2-10x-y^2
-    r1 := make_from_coefficients(
+    system[0] = make_from_coefficients(
         Polynomial(f32, field.Field(f32)),
         id,
         []Polynomial(f32, field.Field(f32)){
@@ -887,10 +891,10 @@ test_multi_variable_solve :: proc(t: ^testing.T)
             make_from_coefficients(f32, field.FIELD_F32, []f32{1}),
         }
     )
-    defer delete_polynomial(r1)
+    defer delete_polynomial(system[0])
 
     // x^2+1+y
-    r2 := make_from_coefficients(
+    system[1] = make_from_coefficients(
         Polynomial(f32, field.Field(f32)),
         id,
         []Polynomial(f32, field.Field(f32)){
@@ -899,48 +903,27 @@ test_multi_variable_solve :: proc(t: ^testing.T)
             make_from_coefficients(f32, field.FIELD_F32, []f32{1}),
         }
     )
-    defer delete_polynomial(r2)
+    defer delete_polynomial(system[1])
 
-    // y^4 + 2 y^3 + 3 y^2 + 102 y + 101
-    res := resultant(r1, r2)
-    defer delete_polynomial(res)
-    expected_res := make_from_coefficients(f32, field.FIELD_F32, []f32{101, 102, 3, 2, 1})
-    defer delete_polynomial(expected_res)
+    roots := solve_system(2, complex64, system)
+    defer delete(roots)
 
-    testing.expect(t, eq(res, expected_res))
-
-    y_values := real_roots(res)
-    defer delete(y_values)
-    for y in y_values
+    testing.expect(t, len(roots) == 4)
+    for root in roots
     {
-        substituted_polynomial_r1 := make_uninitialized(f32, field.FIELD_F32, degree(r1))
-        defer delete_polynomial(substituted_polynomial_r1)
-        substituted_polynomial_r2 := make_uninitialized(f32, field.FIELD_F32, degree(r2))
-        defer delete_polynomial(substituted_polynomial_r2)
-        for i in 0..=degree(r1)
+        s_add :: proc(ans : ^complex64, t : f32, s : complex64)
         {
-            substituted_polynomial_r1.coefficients[i] = eval(r1.coefficients[i], y)
+            ans^ = complex64(t) + s
         }
-        for i in 0..=degree(r2)
-        {
-            substituted_polynomial_r2.coefficients[i] = eval(r2.coefficients[i], y)
-        }
-
-        x_values_r1 := real_roots(substituted_polynomial_r1)
-        defer delete(x_values_r1)
-        x_values_r2 := real_roots(substituted_polynomial_r2)
-        defer delete(x_values_r2)
-
-        // match up roots
-        for x1 in x_values_r1
-        {
-            for x2 in x_values_r2
-            {
-                if abs(x1 - x2) < 1e-6
-                {
-                    log.info("root x =", x1, "y =", y)
-                }
-            }
-        }
+        value_at_root_0 := muli_var_eval(
+            system[0],
+            root, field.NumericField(complex64){}, s_add
+        )
+        value_at_root_1 := muli_var_eval(
+            system[0],
+            root, field.NumericField(complex64){}, s_add
+        )
+        testing.expect(t, cmplx.abs(value_at_root_0) < 1e-6)
+        testing.expect(t, cmplx.abs(value_at_root_1) < 1e-6)
     }
 }

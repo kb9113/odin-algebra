@@ -168,7 +168,7 @@ sb_print_polynomial_numeric :: proc(builder : ^strings.Builder, p : Polynomial($
     }
     for i := degree(p); i >= 0; i -= 1
     {
-        if eq(p.coefficients[i], add_identity) { continue }
+        if p.coefficients[i] == 0 { continue }
         if i != degree(p) { fmt.sbprint(builder, " + ", sep = "") }
         fmt.sbprint(builder, "(")
         fmt.sbprint(builder, p.coefficients[i])

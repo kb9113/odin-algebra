@@ -7,11 +7,13 @@ import "core:log"
 import "core:mem"
 import "../algebraic_structures/ring"
 import "../algebraic_structures/field"
+import "../algebraic_structures/euclidean_ring"
 
 // evaluates the polynomial at x
 eval :: proc{
     eval_same_type,
-    eval_different_type,
+    eval_to_coefficient_type,
+    eval_to_x_type,
 }
 
 eval_same_type :: proc(p : Polynomial($T, $ST), x : T) -> T
@@ -50,104 +52,121 @@ eval_same_type :: proc(p : Polynomial($T, $ST), x : T) -> T
     return ans
 }
 
-// use this when the expected output type of your function is different to the coefficients type
-eval_different_type :: proc(p : Polynomial($T, $ST), x : $V, s_mul : proc(s : V, t : T) -> V) ->
-    V where intrinsics.type_is_numeric(V)
+// use this when you expect the output type to be the coefficient type
+// s_mul should set ans = t * s
+eval_to_coefficient_type :: proc(
+    p : Polynomial($T, $ST),
+    x : $V, s_mul : proc(ans : ^T, t : T, s : V)
+) -> T where ST == field.NumericField(T) ||
+    ST == euclidean_ring.NumericEuclideanRing(T) ||
+    intrinsics.type_is_subtype_of(ST, ring.Ring(T))
 {
     assert(is_valid(p))
 
-    ans : V = 0
-    x_n : V = 1
-    for i in 0..=degree(p)
+    if degree(p) == -1
     {
-        ans += s_mul(x_n, p.coefficients[i])
-        x_n *= x
+        when ST == field.NumericField(T) || ST == euclidean_ring.NumericEuclideanRing(T)
+        {
+            return 0
+        }
+        else
+        {
+            ans : T
+            p.algebraic_structure.set(&ans, p.algebraic_structure.add_identity)
+            return ans
+        }
+    }
+
+    ans : T
+    p.algebraic_structure.set(&ans, p.coefficients[degree(p)])
+    for i = (degree(p) - 1); i >= 0; i -= 1
+    {
+        s_mul(&ans, ans, x)
+        when ST == field.NumericField(T) || ST == euclidean_ring.NumericEuclideanRing(T)
+        {
+            ans += p.coefficients[i]
+        }
+        else
+        {
+            p.algebraic_structure.add(&ans, ans, p.coefficients[i])
+        }
     }
     return ans
 }
 
-// uses the durand–kerner method to return the complex roots
-roots :: proc{
-    roots_complex128,
-    roots_complex64,
-    roots_complex32,
-}
-
-roots_numeric :: proc($C : typeid, p : Polynomial($T, $ST), max_iterations := 100) -> []C
+// use this when you expect the output type to be the type of x
+// s_add should set ans = t + s
+eval_to_x_type :: proc(
+    p : Polynomial($T, $ST),
+    x : $V, ring_x : $SV, s_add : proc(ans : ^V, t : T, s : V)
+) -> V where (ST == field.NumericField(T) ||
+        ST == euclidean_ring.NumericEuclideanRing(T) ||
+        intrinsics.type_is_subtype_of(ST, ring.Ring(T))) &&
+        (SV == field.NumericField(V) ||
+        SV == euclidean_ring.NumericEuclideanRing(V) ||
+        intrinsics.type_is_subtype_of(SV, ring.Ring(V)))
 {
     assert(is_valid(p))
 
-    s_mul :: proc(s : C, t : T) -> C
+    if degree(p) == -1
     {
-        return s * C(t)
-    }
-
-    degree := degree(p)
-
-    // init guesses
-    roots := make([dynamic]C)
-    curr : C = complex(0.3, 0.7)
-    for i in 0..<degree
-    {
-        append(&roots, curr)
-        curr *= complex(0.3, 0.7)
-    }
-
-    // find roots
-    cumulative_change : T = 1
-    i := 0
-    for cumulative_change > 1e-6 && i < max_iterations
-    {
-        cumulative_change = 0
-        for i in 0..<len(roots)
+        when SV == field.NumericField(V) || SV == euclidean_ring.NumericEuclideanRing(V)
         {
-            denominator : C = complex(1, 0)
-            for j in 0..<len(roots)
-            {
-                if i == j { continue }
-                denominator *= roots[i] - roots[j]
-            }
-            f_x := eval(p, roots[i], s_mul) / C(p.coefficients[degree])
-            roots[i] -= f_x / denominator
-            cumulative_change += cmplx.abs(f_x / denominator)
+            return 0
         }
-        i += 1
-    }
-    return roots[:]
-}
-
-roots_complex128 :: proc(p : Polynomial($T, $ST)) -> []complex128
-    where T == f64 || T == complex128
-{
-    return roots_numeric(complex128, p)
-}
-
-roots_complex64 :: proc(p : Polynomial($T, $ST)) -> []complex64
-    where T == f32 || T == complex64
-{
-    return roots_numeric(complex64, p)
-}
-
-roots_complex32 :: proc(p : Polynomial($T, $ST)) -> []complex32
-    where T == f16 || T == complex32
-{
-    return roots_numeric(complex32, p)
-}
-
-
-// uses the durand–kerner method to return the complex roots then filters the roots to only roots with small imaginary components
-real_roots :: proc(p : Polynomial($T, $ST)) -> []T
-    where intrinsics.type_is_float(T)
-{
-    complex_roots := roots(p)
-    real_roots := make([dynamic]T)
-    for root in complex_roots
-    {
-        if cmplx.imag(root) < 1e-6
+        else
         {
-            append(&real_roots, cmplx.real(root))
+            ans : V
+            ring_x.set(&ans, ring_x.add_identity)
+            return ans
         }
     }
-    delete(complex_roots)
-    return real_roots[:]
+
+    ans : V
+    when SV == field.NumericField(V) || SV == euclidean_ring.NumericEuclideanRing(V)
+    { s_add(&ans, p.coefficients[degree(p)], 0) }
+    else { s_add(&ans, p.coefficients[degree(p)], ring_x.add_identity) }
+
+    for i := degree(p) - 1; i >= 0; i -= 1
+    {
+        when SV == field.NumericField(V) || SV == euclidean_ring.NumericEuclideanRing(V)
+        {
+            ans *= x
+            s_add(&ans, p.coefficients[i], ans)
+        }
+        else
+        {
+            ring_x.mul(&ans, ans, x)
+            s_add(&ans, p.coefficients[i], ans)
+        }
+    }
+    return ans
+}
+
+// s_add should set ans = t + s
+muli_var_eval :: proc(
+    p : Polynomial($T, $ST),
+    x : [$N_VARS]$C, ring_x : $SC,
+    s_add : proc(ans : ^C, t : $U, s : C)
+) -> C
+{
+    x := x
+    when N_VARS == 1
+    {
+        return eval_to_x_type(p, x[0], ring_x, s_add)
+    }
+    else
+    {
+        poly := make_uninitialized(C, ring_x, degree(p))
+        defer delete_polynomial(poly)
+        for i in 0..=degree(p)
+        {
+            new_x := (cast(^[N_VARS - 1]C)raw_data(x[1:]))^
+            poly.coefficients[i] = muli_var_eval(
+                p.coefficients[i],
+                new_x, ring_x, s_add
+            )
+        }
+        return eval(poly, x[0])
+    }
 }
