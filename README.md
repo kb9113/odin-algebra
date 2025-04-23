@@ -72,3 +72,6 @@ for root in roots
     testing.expect(t, cmplx.abs(value_at_root_1) < 1e-6)
 }
 ```
+## Todo
+- Complex Fields similar to how Rationals work now
+- Algebraic Numbers
